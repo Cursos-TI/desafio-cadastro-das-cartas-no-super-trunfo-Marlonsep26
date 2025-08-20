@@ -1,0 +1,115 @@
+#include <stdio.h>
+#include <string.h>
+
+// Estrutura que representa uma carta de país
+typedef struct {
+    char nome[50];
+    int populacao;
+    float area;
+    float pib;
+    int pontosTuristicos;
+    float densidade;
+} Carta;
+
+// Função que exibe o menu e retorna a escolha do atributo
+int escolherAtributo(int jaEscolhido) {
+    int opcao;
+
+    printf("\nEscolha um atributo:\n");
+    if (jaEscolhido != 1) printf("1 - População\n");
+    if (jaEscolhido != 2) printf("2 - Área\n");
+    if (jaEscolhido != 3) printf("3 - PIB\n");
+    if (jaEscolhido != 4) printf("4 - Pontos Turísticos\n");
+    if (jaEscolhido != 5) printf("5 - Densidade Demográfica\n");
+    printf("Digite sua opção: ");
+    scanf("%d", &opcao);
+
+    // Validação de entrada
+    if (opcao < 1 || opcao > 5 || opcao == jaEscolhido) {
+        printf("Opção inválida. Tente novamente.\n");
+        return escolherAtributo(jaEscolhido);
+    }
+
+    return opcao;
+}
+
+// Função que retorna o valor de um atributo da carta
+float obterValor(Carta c, int atributo) {
+    switch (atributo) {
+        case 1: return (float)c.populacao;
+        case 2: return c.area;
+        case 3: return c.pib;
+        case 4: return (float)c.pontosTuristicos;
+        case 5: return c.densidade;
+        default: return 0;
+    }
+}
+
+// Função que imprime o nome do atributo
+void imprimirNomeAtributo(int atributo) {
+    switch (atributo) {
+        case 1: printf("População"); break;
+        case 2: printf("Área"); break;
+        case 3: printf("PIB"); break;
+        case 4: printf("Pontos Turísticos"); break;
+        case 5: printf("Densidade Demográfica"); break;
+    }
+}
+
+int main() {
+    // Cadastro de exemplo
+    Carta pais1 = {"Brasil", 211000000, 8515767.0, 2.055, 50, 211000000 / 8515767.0};
+    Carta pais2 = {"Alemanha", 83000000, 357386.0, 3.806, 60, 83000000 / 357386.0};
+
+    int atributo1, atributo2;
+
+    printf("=== SUPER TRUNFO - COMPARAÇÃO AVANÇADA ===\n");
+    printf("Você irá escolher dois atributos para comparar as cartas.\n");
+
+    // Escolha dos atributos
+    atributo1 = escolherAtributo(0);
+    atributo2 = escolherAtributo(atributo1);
+
+    // Obter os valores de cada carta para os dois atributos
+    float valor1_c1 = obterValor(pais1, atributo1);
+    float valor1_c2 = obterValor(pais2, atributo1);
+    float valor2_c1 = obterValor(pais1, atributo2);
+    float valor2_c2 = obterValor(pais2, atributo2);
+
+    // Comparação para densidade (invertida)
+    float ponto1_c1 = (atributo1 == 5) ? -valor1_c1 : valor1_c1;
+    float ponto1_c2 = (atributo1 == 5) ? -valor1_c2 : valor1_c2;
+    float ponto2_c1 = (atributo2 == 5) ? -valor2_c1 : valor2_c1;
+    float ponto2_c2 = (atributo2 == 5) ? -valor2_c2 : valor2_c2;
+
+    float soma_c1 = ponto1_c1 + ponto2_c1;
+    float soma_c2 = ponto1_c2 + ponto2_c2;
+
+    // Exibir resultado
+    printf("\n=== RESULTADO DA COMPARAÇÃO ===\n");
+    printf("País 1: %s\n", pais1.nome);
+    printf("País 2: %s\n\n", pais2.nome);
+
+    printf("Atributo 1: ");
+    imprimirNomeAtributo(atributo1);
+    printf("\n%s: %.2f\n", pais1.nome, valor1_c1);
+    printf("%s: %.2f\n\n", pais2.nome, valor1_c2);
+
+    printf("Atributo 2: ");
+    imprimirNomeAtributo(atributo2);
+    printf("\n%s: %.2f\n", pais1.nome, valor2_c1);
+    printf("%s: %.2f\n\n", pais2.nome, valor2_c2);
+
+    printf("Soma final dos atributos:\n");
+    printf("%s: %.2f\n", pais1.nome, soma_c1);
+    printf("%s: %.2f\n\n", pais2.nome, soma_c2);
+
+    if (soma_c1 > soma_c2)
+        printf("VENCEDOR: %s!\n", pais1.nome);
+    else if (soma_c2 > soma_c1)
+        printf("VENCEDOR: %s!\n", pais2.nome);
+    else
+        printf("EMPATE!\n");
+
+    return 0;
+}
